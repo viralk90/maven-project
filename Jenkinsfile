@@ -27,7 +27,12 @@ pipeline{
         }
         stage('Deploy'){
             steps{
+
                 echo"This is Deployment stage"
+                timeout(time: 50, unit: 'SECONDS') {
+                // some block
+                input 'Do you want to deploy on dev server?'
+                }
                 build 'deploy to tomcat'
             }
         }
