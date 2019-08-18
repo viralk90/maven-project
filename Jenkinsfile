@@ -3,7 +3,7 @@ pipeline{
     tools{
         maven 'Maven3'
         jdk 'Java 8'
-        
+
     }
     stages{
         stage('init'){
@@ -15,13 +15,20 @@ pipeline{
             steps{
                 echo"This is Build stage"
                 sh label: '', script: 'mvn clean package checkstyle:checkstyle'
-                checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
-                junit '**/surefire-reports/*.xml'
+                
+            }
+            post{
+                success{
+                        echo"post success script start executing..."
+                        checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                        junit '**/surefire-reports/*.xml'
+                }
             }
         }
         stage('Deploy'){
             steps{
                 echo"This is Deployment stage"
+                build 'deploy to tomcat'
             }
         }
     }
