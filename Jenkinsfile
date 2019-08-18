@@ -1,5 +1,10 @@
 pipeline{
     agent any
+    tools{
+        maven 'Maven3'
+        jdk 'Java 8'
+        
+    }
     stages{
         stage('init'){
             steps{
@@ -9,6 +14,9 @@ pipeline{
         stage('Build'){
             steps{
                 echo"This is Build stage"
+                sh label: '', script: 'mvn clean package checkstyle:checkstyle'
+                checkstyle canComputeNew: false, defaultEncoding: '', healthy: '', pattern: '', unHealthy: ''
+                junit '**/surefire-reports/*.xml'
             }
         }
         stage('Deploy'){
